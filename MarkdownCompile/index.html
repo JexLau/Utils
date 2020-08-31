@@ -1,0 +1,130 @@
+<!--
+ * @Description: 使用Markdown Compiler编译的demo，主要实现层级的伸缩
+ * @Author: Jex
+ * @Date: 2020-08-31 14:31:27
+ * @Last modefied by: Jex
+ * @LastEditTime: 2020-08-31 14:52:08
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Compiler</title>
+  <link rel="stylesheet" href="./base.css">
+  <style lang="scss">
+    .drop {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+  
+    .drop+input {
+      display: none;
+    }
+  
+    .drop+input+div {
+      display: none;
+    }
+  
+    .drop+input:checked+div {
+      display: block;
+    }
+  
+    .image-1 {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background-image: url("./images/packages.png");
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: center;
+      position: relative;
+      bottom: -3px;
+    }
+  
+    .image-2 {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background-image: url("./images/lib.png");
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: center;
+      position: relative;
+      bottom: -3px;
+    }
+  
+    .image-3 {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-image: url("./images/fn.png");
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: center;
+      position: relative;
+      bottom: -2px;
+    }
+  
+    .mr-1 {
+      margin-left: 0px;
+      padding: 0 10px;
+      border: 1px gray solid;
+      margin-bottom: 10px;
+    }
+  
+    .mr-2 {
+      margin-left: 16px;
+    }
+  
+    .mr-3 {
+      margin-left: 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root">
+    <div id="markdown"></div>
+  </div>
+  <script src="./compile.js"></script>
+  <script>
+    const html = `
+## > 一级标题
+
+### >> 二级标题1
+
+### >>> 三级小标题1
+
+描述：我是文本1
+
+#### 四级小标题1
+
+| 名称 |  类型  |  描述  |  备注  |
+|  initial | func | 自定义函数 | 初始化 |
+|  on_data | func | 自定义函数 |  监听数据  |
+
+### >>> 三级小标题2
+
+描述：我是文本2
+
+#### 四级小标题2
+
+|  类型  |  备注  |
+| Object | 对象|
+
+## > 二级标题2
+
+### >>> XXXX
+
+描述：文本
+`;
+    function getDom(selector) {
+      return document.querySelector(selector);
+    }
+    new Markdown(html, getDom("#markdown")).init();
+  </script>
+</body>
+
+</html>
