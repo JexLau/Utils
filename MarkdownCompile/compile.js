@@ -183,7 +183,6 @@ Markdown.prototype = {
         }
       }
     }
-    console.log(html);
     return html;
   },
   format: function (str) {
