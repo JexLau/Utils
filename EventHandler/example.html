@@ -1,0 +1,48 @@
+<!--
+ * @Description: 
+ * @Author: Jex
+ * @Date: 2020-09-08 20:24:37
+ * @Last modefied by: Jex
+ * @LastEditTime: 2020-09-08 20:33:06
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件处理程序</title>
+  <style>
+    #btn {
+      width: 90px;
+      height: 40px;
+      background: burlywood;
+      text-align: center;
+      line-height: 40px;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="btn">点我</div>
+</body>
+<script src="./event-handler.js"></script>
+<script>
+  // 获取元素
+  const btn = document.getElementById('btn');
+  // 定义handler
+  const handler = function (e) {
+    console.log('我被点击了');
+  }
+  // 监听事件
+  EventHandler.addHandler(btn, 'click', handler);
+
+  setTimeout(() => {
+    // 1min 后移除事件监听
+    console.log('移除事件监听')
+    EventHandler.removeHandler(btn, 'click', handler);
+  }, 10 * 1000)
+</script>
+</html>

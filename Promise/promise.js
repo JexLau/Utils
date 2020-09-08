@@ -4,12 +4,11 @@ const FULFILLLED = "fulfilled";
 const REJECTED = "rejected";
 
 function Promise(executor) {
-  let self = this;// 先缓存当前promise的实例
-  self.status = PENDING; // 设置状态
-  self.value = undefined; // fulfilled状态时 返回的信息
-  self.reason = undefined; // rejected状态时 拒绝的原因
-  self.onResolvedCallbacks = []; // 定义存放成功的回调的数组
-  self.onRejectedCallbacks = []; // 定义存放失败的回调的数组
+  this.status = PENDING; // 设置状态
+  this.value = undefined; // fulfilled状态时 返回的信息
+  this.reason = undefined; // rejected状态时 拒绝的原因
+  this.onResolvedCallbacks = []; // 定义存放成功的回调的数组
+  this.onRejectedCallbacks = []; // 定义存放失败的回调的数组
 
   // 成功时候执行的回调
   function resolve(value) {
@@ -17,20 +16,20 @@ function Promise(executor) {
       return value.then(resolve, reject);
     }
     setTimeout(() => {
-      if (self.status === PENDING) {
-        self.status = FULFILLLED;
-        self.value = value;
-        self.onResolvedCallbacks.forEach(cb => cb(self.value));
+      if (this.status === PENDING) {
+        this.status = FULFILLLED;
+        this.value = value;
+        this.onResolvedCallbacks.forEach(cb => cb(this.value));
       }
     });
   }
 
   function reject(reason) {
     setTimeout(() => {
-      if (self.status === PENDING) {
-        self.status = REJECTED;
-        self.reason = reason;
-        self.onRejectedCallbacks.forEach(cb => cb(self.reason));
+      if (this.status === PENDING) {
+        this.status = REJECTED;
+        this.reason = reason;
+        this.onRejectedCallbacks.forEach(cb => cb(this.reason));
       }
     });
   }
@@ -113,16 +112,15 @@ Promise.prototype.then = function (onFULFILLLED, onRejected) {
   // 如果没有传参数，表示这个then没有逻辑，把结果往后抛，注意reject就是把错误继续throw
   onFULFILLLED = typeof onFULFILLLED === "function" ? onFULFILLLED : value => value;
   onRejected = typeof onRejected === "function" ? onRejected : reason => { throw reason };
-  let self = this;
 
   let promise2;
   // ------------- executor内部是同步的时候，直接调用
   // 如果当前promise的状态是成功态，onFULFILLLED直接取值
-  if (self.status === FULFILLLED) {
+  if (this.status === FULFILLLED) {
     return promise2 = new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {
-          let x = onFULFILLLED(self.value);
+          let x = onFULFILLLED(this.value);
           resolvePromise(promise2, x, resolve, reject);
         } catch (error) {
           reject(error);
@@ -132,11 +130,11 @@ Promise.prototype.then = function (onFULFILLLED, onRejected) {
     })
   }
   // 失败态，直接取值reject
-  if (self.status === REJECTED) {
+  if (this.status === REJECTED) {
     return promise2 = new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {
-          let x = onRejected(self.reason);
+          let x = onRejected(this.reason);
           resolvePromise(promise2, x, resolve, reject);
         } catch (error) {
           reject(error);
@@ -146,9 +144,9 @@ Promise.prototype.then = function (onFULFILLLED, onRejected) {
   }
 
 
-  if (self.status === PENDING) { //等待态
+  if (this.status === PENDING) { //等待态
     return promise2 = new Promise(function (resolve, reject) {
-      self.onResolvedCallbacks.push(function (value) {
+      this.onResolvedCallbacks.push(function (value) {
         try {
           let x = onFULFILLLED(value);
           resolvePromise(promise2, x, resolve, reject);
@@ -156,7 +154,7 @@ Promise.prototype.then = function (onFULFILLLED, onRejected) {
           reject(error);
         }
       });
-      self.onRejectedCallbacks.push(function (reason) {
+      this.onRejectedCallbacks.push(function (reason) {
         try {
           let x = onRejected(reason);
           resolvePromise(promise2, x, resolve, reject);
